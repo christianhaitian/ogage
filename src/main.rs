@@ -78,12 +78,15 @@ use std::process::Command;
 //    }
 //}
 
+static HOTKEY: EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
+
 fn handle_event(dev: &Device, ev: &InputEvent) {
 //    if ev.event_type != EventType::EV_KEY {
 //        return;
 //    }
 
-    let f3 = dev.event_value(&EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3));
+    let f3 = dev.event_value(&HOTKEY);
+
     println!("Event: time {}.{}, type {} , code {} , value {} f3 {}",
              ev.time.tv_sec,
              ev.time.tv_usec,
@@ -98,14 +101,14 @@ fn handle_event(dev: &Device, ev: &InputEvent) {
 }
 
 fn main() {
-    let f = File::open(Path::new("/dev/input/event8")).unwrap();
+    let f = File::open(Path::new("/dev/input/event2")).unwrap();
 
-    let mut dev = Device::new().unwrap();
-    dev.set_fd(f).unwrap();
+    let mut dev_js = Device::new().unwrap();
+    dev_js.set_fd(f).unwrap();
 
     let mut a: io::Result<(ReadStatus, InputEvent)>;
     loop {
-        a = dev.next_event(evdev::ReadFlag::NORMAL | evdev::ReadFlag::BLOCKING);
+        a = dev_js.next_event(evdev::ReadFlag::NORMAL | evdev::ReadFlag::BLOCKING);
         if a.is_ok() {
             let result = a.ok().unwrap();
             if result.0 == ReadStatus::Success {
