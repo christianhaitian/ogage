@@ -12,4 +12,5 @@ panic = 'abort'
 
 [dependencies]
 evdev-rs = "*"
+mio = { version = "0.7", features = ["os-poll", "os-util"]}
 
