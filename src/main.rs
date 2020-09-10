@@ -28,7 +28,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //             ev.value,
 //             hotkey);
 
-    if hotkey {
+    if hotkey && ev.value == 1 {
         if ev.event_code == BRIGHT_UP {
             Command::new("light").args(&["-T","1.1"]).output().expect("Failed to execute light");
             Command::new("light").arg("-O").output().expect("Failed to execute light");
@@ -57,7 +57,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         let dest = match ev.value { 1 => "SPK", _ => "HP" };
         Command::new("amixer").args(&["-q", "sset", "'Playback Path'", dest]).output().expect("Failed to execute amixer");
     }
-    else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
+    else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value == 1 {
         Command::new("sudo").args(&["zzz"]).output().expect("Failed to execute suspend");
     }
 }
@@ -86,10 +86,8 @@ fn main() -> io::Result<()> {
                 let e = dev.next_event(evdev_rs::ReadFlag::NORMAL);
                 match e {
                     Ok(k) => {
-                        if k.1.value == 1 {
-                            let hotkey = devs[0].event_value(&HOTKEY) == Some(1);
-                            process_event(&dev, &k.1, hotkey)
-                        }
+                        let hotkey = devs[0].event_value(&HOTKEY) == Some(1);
+                        process_event(&dev, &k.1, hotkey)
                     },
                     _ => ()
                 }
