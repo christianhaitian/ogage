@@ -18,6 +18,8 @@ static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
 static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
 static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
+static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
+static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //    println!("Event: time {}.{} type {} code {} value {} hotkey {}",
@@ -51,6 +53,18 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         }
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
             Command::new("sudo").args(&["shutdown", "-h", "now"]).output().expect("Failed to execute power off");
+        }
+        else if ev.event_code == DARK_ON {
+            Command::new("light").arg("-O").output().expect("Failed to execute light");
+            Command::new("light").args(&["-S", "1"]).output().expect("Failed to execute light");
+            Command::new("dark").arg("on").output().expect("Failed to execute dark");
+            Command::new("light").arg("-I").output().expect("Failed to execute light");
+        }
+        else if ev.event_code == DARK_OFF {
+            Command::new("light").arg("-O").output().expect("Failed to execute light");
+            Command::new("light").args(&["-S", "100"]).output().expect("Failed to execute light");
+            Command::new("dark").arg("off").output().expect("Failed to execute dark");
+            Command::new("light").arg("-I").output().expect("Failed to execute light");
         }
     }
     else if ev.event_code == EventCode::EV_SW(EV_SW::SW_HEADPHONE_INSERT) {
