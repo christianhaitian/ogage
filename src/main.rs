@@ -80,6 +80,7 @@ fn main() -> io::Result<()> {
     let mut poll = Poll::new()?;
     let mut events = Events::with_capacity(1);
     let mut devs: Vec<Device> = Vec::new();
+    let mut hotkey = false;
 
     for (i, s) in ["/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter().enumerate() {
         let fd = File::open(Path::new(s)).unwrap();
@@ -95,13 +96,18 @@ fn main() -> io::Result<()> {
         poll.poll(&mut events, None)?;
 
         for event in events.iter() {
-            let dev = &devs[event.token().0];
+            let dev = &mut devs[event.token().0];
             while dev.has_event_pending() {
                 let e = dev.next_event(evdev_rs::ReadFlag::NORMAL);
                 match e {
                     Ok(k) => {
-                        let hotkey = devs[0].event_value(&HOTKEY) == Some(1);
-                        process_event(&dev, &k.1, hotkey)
+                        let ev = &k.1;
+                        if ev.event_code == HOTKEY {
+                            hotkey = ev.value == 1;
+                            let grab = if hotkey { GrabMode::Grab } else { GrabMode::Ungrab };
+                            dev.grab(grab)?;
+                        }
+                        process_event(&dev, &ev, hotkey)
                     },
                     _ => ()
                 }
