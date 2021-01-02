@@ -55,16 +55,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("sudo").args(&["shutdown", "-h", "now"]).output().expect("Failed to execute power off");
         }
         else if ev.event_code == DARK_ON {
-            Command::new("light").arg("-O").output().expect("Failed to execute light");
-            Command::new("light").args(&["-S", "1"]).output().expect("Failed to execute light");
-            Command::new("dark").arg("on").output().expect("Failed to execute dark");
-            Command::new("light").arg("-I").output().expect("Failed to execute light");
+            Command::new("sudo").args(&["rfkill", "block", "all"]).output().expect("Failed to execute rfkill");
         }
         else if ev.event_code == DARK_OFF {
-            Command::new("light").arg("-O").output().expect("Failed to execute light");
-            Command::new("light").args(&["-S", "100"]).output().expect("Failed to execute light");
-            Command::new("dark").arg("off").output().expect("Failed to execute dark");
-            Command::new("light").arg("-I").output().expect("Failed to execute light");
+            Command::new("sudo").args(&["rfkill", "unblock", "all"]).output().expect("Failed to execute rfkill");
         }
     }
     else if ev.event_code == EventCode::EV_SW(EV_SW::SW_HEADPHONE_INSERT) {
