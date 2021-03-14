@@ -58,11 +58,11 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 
     if hotkey && ev.value == 1 {
         if ev.event_code == BRIGHT_UP {
-            Command::new("brightnessctl").args(&["s","+5%"]).output().expect("Failed to execute brightnessctl");
+            Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == BRIGHT_DOWN {
-            Command::new("brightnessctl").args(&["s","5%-"]).output().expect("Failed to execute brightnessctl");
+            Command::new("brightnessctl").args(&["-n","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_UP {
