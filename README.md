@@ -1,4 +1,4 @@
-# ogage
+# ogage for RK2020/OGA 1.0
 
 Prequisites
 ===========
