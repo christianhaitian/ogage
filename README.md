@@ -1,4 +1,4 @@
-# ogage
+# ogage for RG351P/M
 
 Prequisites
 ===========
@@ -9,7 +9,7 @@ Prequisites
 Build
 =====
 ```
-git clone https://github.com/christianhaitian/ogage.git
+git clone https://github.com/christianhaitian/ogage.git -b rg351
 cd ogage
 cargo build --release
 strip target/release/ogage
