@@ -1,4 +1,4 @@
-# ogage
+# ogage for RGB10/OGA BE (1.1)
 
 Prequisites
 ===========
