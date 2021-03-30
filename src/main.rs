@@ -23,7 +23,7 @@ static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
 static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 
-fn blink1() {
+/*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
 
     Command::new("brightnessctl").args(&["-T","1.5"]).output().expect("Failed to execute brightnessctl");
@@ -45,7 +45,7 @@ fn blink2() {
     Command::new("sleep").arg("0.1").output().expect("Failed to execute brightnessctl");
 
     Command::new("brightnessctl").arg("-I").output().expect("Failed to execute brightnessctl");
-}
+}*/
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //    println!("Event: time {}.{} type {} code {} value {} hotkey {}",
