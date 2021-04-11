@@ -12,8 +12,9 @@ use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
 static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-static BRIGHT:   EventCode = EventCode::EV_ABS(EV_ABS::ABS_HAT0Y);
-//static VOL:      EventCode = EventCode::EV_ABS(EV_ABS::ABS_HAT0X);
+static BRIGHT:      EventCode = EventCode::EV_ABS(EV_ABS::ABS_HAT0Y);
+static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
+static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_Z);
 static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_WEST);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
@@ -97,6 +98,12 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         //blink2();
         Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
     }
+    else if ev.event_code == VOL_UP && ev.value > 0 {
+         Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+    }
+    else if ev.event_code == VOL_DN && ev.value > 0 {
+         Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+    }
 }
 
 fn main() -> io::Result<()> {
@@ -106,7 +113,7 @@ fn main() -> io::Result<()> {
     let mut hotkey = false;
 
     let mut i = 0;
-    for s in ["/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
+    for s in ["/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
         if !Path::new(s).exists() {
             println!("Path {} doesn't exist", s);
             continue;
