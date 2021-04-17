@@ -62,6 +62,14 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("brightnessctl").args(&["-n15","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
+        else if ev.event_code == VOL_UP && ev.value > 0 {
+            Command::new("brightnessctl").args(&["s","+1%"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_DN && ev.value > 0 {
+            Command::new("brightnessctl").args(&["-n15","s","1%-"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
         /*else if ev.event_code == VOL && ev.value == 1 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
         }
@@ -69,7 +77,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }*/
         else if ev.event_code == PERF_MAX {
-            Command::new("sudo").arg("perfmax").output().expect("Failed to execute performance");
+            Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
             //blink1();
         }
         else if ev.event_code == PERF_NORM {
