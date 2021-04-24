@@ -18,7 +18,7 @@ static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_Z);
 static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_WEST);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-//static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
+static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -62,6 +62,14 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("brightnessctl").args(&["-n15","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
+        else if ev.event_code == VOL_UP && ev.value > 0 {
+            Command::new("brightnessctl").args(&["s","+1%"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_DN && ev.value > 0 {
+            Command::new("brightnessctl").args(&["-n15","s","1%-"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
         /*else if ev.event_code == VOL && ev.value == 1 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
         }
@@ -69,7 +77,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }*/
         else if ev.event_code == PERF_MAX {
-            Command::new("sudo").arg("perfmax").output().expect("Failed to execute performance");
+            Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
             //blink1();
         }
         else if ev.event_code == PERF_NORM {
@@ -83,11 +91,11 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         /*else if ev.event_code == DARK_ON {
             Command::new("sudo").args(&["rfkill", "block", "all"]).output().expect("Failed to execute rfkill");
             blink1();
-        }
-        else if ev.event_code == DARK_OFF {
-            Command::new("sudo").args(&["rfkill", "unblock", "all"]).output().expect("Failed to execute rfkill");
-            blink1();
         }*/
+        else if ev.event_code == WIFI_T && ev.value == 1 {
+            Command::new("sudo").arg("wifitoggle.sh").output().expect("Failed to execute wifitoggle.sh");
+            //blink1();
+        }
     }
     else if ev.event_code == EventCode::EV_SW(EV_SW::SW_HEADPHONE_INSERT) {
         let dest = match ev.value { 1 => "SPK", _ => "HP" };
