@@ -11,7 +11,7 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY5);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
@@ -93,7 +93,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         //}
     }
     else if ev.event_code == EventCode::EV_SW(EV_SW::SW_HEADPHONE_INSERT) {
-        let dest = match ev.value { 1 => "SPK", _ => "HP" };
+        let dest = match ev.value { 0 => "SPK", _ => "HP" };
         Command::new("amixer").args(&["-q", "sset", "'Playback Path'", dest]).output().expect("Failed to execute amixer");
         //blink1();
     }
@@ -116,7 +116,7 @@ fn main() -> io::Result<()> {
     let mut hotkey = false;
 
     let mut i = 0;
-    for s in ["/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
+    for s in ["/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
         if !Path::new(s).exists() {
             println!("Path {} doesn't exist", s);
             continue;
