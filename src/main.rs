@@ -12,16 +12,18 @@ use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
 static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
+static ONE_KEY:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY1);
+static TWO_KEY:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY2);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
-static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
-static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
+//static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
+//static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
 //static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
-static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
-static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+//static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
+//static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -71,14 +73,20 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         else if ev.event_code == VOL_DOWN {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }
-        else if ev.event_code == PERF_MAX {
-            Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
-            //blink1();
+        else if ev.event_code == ONE_KEY {
+            Command::new("prevled.sh").spawn().expect("Failed to execute");
         }
-        else if ev.event_code == PERF_NORM {
-            Command::new("sudo").arg("perfnorm").output().expect("Failed to execute performance");
-            //blink1();
+        else if ev.event_code == TWO_KEY {
+            Command::new("nextled.sh").spawn().expect("Failed to execute");
         }
+        //else if ev.event_code == PERF_MAX {
+            //Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
+            //blink1();
+        //}
+        //else if ev.event_code == PERF_NORM {
+            //Command::new("sudo").arg("perfnorm").output().expect("Failed to execute performance");
+            //blink1();
+        //}
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
             //blink2();
             Command::new("sudo").args(&["systemctl", "poweroff"]).output().expect("Failed to execute power off");
@@ -101,12 +109,12 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         //blink2();
         Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
     }
-    else if ev.event_code == VOLUME_UP {
-        Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
-    }
-    else if ev.event_code == VOLUME_DOWN {
-        Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
-    }
+    //else if ev.event_code == VOLUME_UP {
+        //Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+    //}
+    //else if ev.event_code == VOLUME_DOWN {
+        //Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+    //}
 }
 
 fn main() -> io::Result<()> {
