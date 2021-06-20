@@ -18,6 +18,7 @@ static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
+static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_SELECT);
 //static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
 //static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
@@ -78,6 +79,9 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         }
         else if ev.event_code == TWO_KEY {
             Command::new("nextled.sh").spawn().expect("Failed to execute");
+        }
+        else if ev.event_code == WIFI_T && ev.value == 1 {
+            Command::new("sudo").arg("wifitoggle.sh").output().expect("Failed to execute wifitoggle.sh");
         }
         //else if ev.event_code == PERF_MAX {
             //Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
