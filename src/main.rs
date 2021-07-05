@@ -11,20 +11,20 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
+static HOTKEY:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
 static ONE_KEY:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY1);
 static TWO_KEY:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY2);
-static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
-static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
-static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
-static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
-static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_SELECT);
-//static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
-//static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
-//static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-//static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
-//static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
-//static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static BRIGHT_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
+static BRIGHT_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
+static VOL_UP:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
+static VOL_DOWN:       EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
+static WIFI_T:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_SELECT);
+//static PERF_MAX:       EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
+//static PERF_NORM:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
+static DISCO_FASTER:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
+static DISCO_SLOWER:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
+//static VOLUME_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
+//static VOLUME_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -82,6 +82,12 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         }
         else if ev.event_code == WIFI_T && ev.value == 1 {
             Command::new("sudo").arg("wifitoggle.sh").output().expect("Failed to execute wifitoggle.sh");
+        }
+        else if ev.event_code == DISCO_FASTER {
+            Command::new("discoled-speedup.sh").spawn().expect("Failed to execute");
+        }
+        else if ev.event_code == DISCO_SLOWER {
+            Command::new("discoled-slowdown.sh").spawn().expect("Failed to execute");
         }
         //else if ev.event_code == PERF_MAX {
             //Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
