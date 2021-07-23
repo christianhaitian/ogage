@@ -15,8 +15,8 @@ static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
 static BRIGHT:      EventCode = EventCode::EV_ABS(EV_ABS::ABS_HAT0Y);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
-static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_Z);
-static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_WEST);
+//static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_Z);
+//static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_WEST);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
 static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
 
@@ -76,14 +76,14 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         else if ev.event_code == VOL && ev.value == -1 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }*/
-        else if ev.event_code == PERF_MAX {
+        /*else if ev.event_code == PERF_MAX {
             Command::new("sudo").args(&["perfmax", "On"]).output().expect("Failed to execute performance");
             //blink1();
         }
         else if ev.event_code == PERF_NORM {
             Command::new("sudo").arg("perfnorm").output().expect("Failed to execute performance");
             //blink1();
-        }
+        }*/
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
             //blink2();
             Command::new("sudo").args(&["systemctl", "poweroff"]).output().expect("Failed to execute power off");
