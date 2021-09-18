@@ -11,14 +11,15 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-static BRIGHT:      EventCode = EventCode::EV_ABS(EV_ABS::ABS_HAT0Y);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4);
+static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
+static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
 //static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_Z);
 //static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_WEST);
 //static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
+//static WIFI_T:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -54,11 +55,11 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
              hotkey);*/
 
     if hotkey{
-        if ev.event_code == BRIGHT && ev.value == -1 {
+        if ev.event_code == BRIGHT_UP {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == BRIGHT && ev.value == 1 {
+        else if ev.event_code == BRIGHT_DOWN {
             Command::new("brightnessctl").args(&["-n15","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
@@ -91,11 +92,11 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         /*else if ev.event_code == DARK_ON {
             Command::new("sudo").args(&["rfkill", "block", "all"]).output().expect("Failed to execute rfkill");
             blink1();
-        }*/
+        }
         else if ev.event_code == WIFI_T && ev.value == 1 {
             Command::new("sudo").arg("wifitoggle.sh").output().expect("Failed to execute wifitoggle.sh");
             //blink1();
-        }
+        }*/
     }
     else if ev.event_code == EventCode::EV_SW(EV_SW::SW_HEADPHONE_INSERT) {
         let dest = match ev.value { 1 => "SPK", _ => "HP" };
