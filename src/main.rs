@@ -60,7 +60,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == BRIGHT_DOWN {
-            Command::new("brightnessctl").args(&["-n15","s","2%-"]).output().expect("Failed to execute brightnessctl");
+            Command::new("brightnessctl").args(&["-n2","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_UP && ev.value > 0 {
@@ -68,7 +68,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_DN && ev.value > 0 {
-            Command::new("brightnessctl").args(&["-n15","s","1%-"]).output().expect("Failed to execute brightnessctl");
+            Command::new("brightnessctl").args(&["-n2","s","1%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         /*else if ev.event_code == VOL && ev.value == 1 {
