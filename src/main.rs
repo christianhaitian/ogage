@@ -11,7 +11,7 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY5);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY2);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
@@ -63,6 +63,14 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         }
         else if ev.event_code == BRIGHT_DOWN {
             Command::new("brightnessctl").args(&["-n","s","2%-"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_UP && ev.value > 0 {
+            Command::new("brightnessctl").args(&["s","+1%"]).output().expect("Failed to execute brightnessctl");
+            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_DN && ev.value > 0 {
+            Command::new("brightnessctl").args(&["-n2","s","1%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_UP {
