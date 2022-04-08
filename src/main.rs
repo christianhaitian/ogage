@@ -26,7 +26,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //             ev.value,
 //             hotkey);
 
-    if hotkey && ev.value == 1 {
+    if hotkey && ev.value > 0 {
         if ev.event_code == BRIGHT_UP {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -55,10 +55,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value == 1 {
         Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
     }
-    else if ev.event_code == VOLUME_UP {
+    else if ev.event_code == VOLUME_UP && ev.value > 0 {
         Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
     }
-    else if ev.event_code == VOLUME_DOWN {
+    else if ev.event_code == VOLUME_DOWN && ev.value > 0 {
         Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
     }
 }
