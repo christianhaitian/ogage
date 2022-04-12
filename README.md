@@ -15,3 +15,12 @@ cargo build --release
 strip target/release/ogage
 ```
 ogage executable will be in the target/release folder.
+
+If you have issues with Cargo, do the following: (Thanks to romadu for the find)
+================================================================================
+```
+apt remove cargo
+apt autoremove
+apt remove rustc
+apt install brightnessctl rustc autotools-dev automake libtool libtool-bin libevdev-dev
+```
