@@ -11,7 +11,7 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_THUMBR);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
@@ -108,10 +108,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
     }
     else if ev.event_code == VOL_UP && ev.value > 0 {
-         Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+         Command::new("amixer").args(&["-q", "sset", "Master", "1%+"]).output().expect("Failed to execute amixer");
     }
     else if ev.event_code == VOL_DN && ev.value > 0 {
-         Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+         Command::new("amixer").args(&["-q", "sset", "Master", "1%-"]).output().expect("Failed to execute amixer");
     }
 }
 
@@ -122,7 +122,7 @@ fn main() -> io::Result<()> {
     let mut hotkey = false;
 
     let mut i = 0;
-    for s in ["/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
+    for s in ["/dev/input/event3", "/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
         if !Path::new(s).exists() {
             println!("Path {} doesn't exist", s);
             continue;
