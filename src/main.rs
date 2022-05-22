@@ -122,7 +122,7 @@ fn main() -> io::Result<()> {
     let mut hotkey = false;
 
     let mut i = 0;
-    for s in ["/dev/input/event3", "/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
+    for s in ["/dev/input/event3", "/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
         if !Path::new(s).exists() {
             println!("Path {} doesn't exist", s);
             continue;
