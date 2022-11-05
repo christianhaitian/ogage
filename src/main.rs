@@ -108,7 +108,7 @@ fn main() -> io::Result<()> {
         for event in events.iter() {
             let dev = &mut devs[event.token().0];
             while dev.has_event_pending() {
-                let e = dev.next_event(evdev_rs::ReadFlag::NORMAL);
+                let e = dev.next_event(evdev_rs::ReadFlag::NORMAL | evdev_rs::ReadFlag::BLOCKING);
                 match e {
                     Ok(k) => {
                         let ev = &k.1;
@@ -117,7 +117,7 @@ fn main() -> io::Result<()> {
                         }
                         process_event(&dev, &ev, hotkey)
                     },
-                    _ => ()
+                    _ => (),
                 }
             }
         }
