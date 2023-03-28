@@ -1,4 +1,4 @@
-# ogage for RG351MP
+# ogage for RK2023
 
 Prequisites
 ===========
@@ -9,7 +9,7 @@ Prequisites
 Build
 =====
 ```
-git clone https://github.com/christianhaitian/ogage.git -b rg351mp
+git clone https://github.com/christianhaitian/ogage.git -b rk2023
 cd ogage
 cargo build --release
 strip target/release/ogage
