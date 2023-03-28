@@ -1,4 +1,4 @@
-# ogage for RGB10/OGA BE (1.1)
+# ogage for RGB10Max
 
 Prequisites
 ===========
@@ -9,7 +9,7 @@ Prequisites
 Build
 =====
 ```
-git clone https://github.com/christianhaitian/ogage.git
+git clone https://github.com/christianhaitian/ogage.git -b rgb10max
 cd ogage
 cargo build --release
 strip target/release/ogage
