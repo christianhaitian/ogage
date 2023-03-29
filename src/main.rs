@@ -18,7 +18,7 @@ static QVOL_UP:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static QVOL_DN:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
-static BT_TRG:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_THUMBR);
+//static BT_TRG:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_THUMBR);
 static SPK_TRG:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_THUMBL);
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
@@ -57,10 +57,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             //blink2();
             Command::new("sudo").args(&["systemctl", "poweroff"]).output().expect("Failed to execute power off");
         }
-        else if ev.event_code == BT_TRG && ev.value > 0 {
+        /*else if ev.event_code == BT_TRG && ev.value > 0 {
             //blink2();
             Command::new("sudo").arg("bttoggle.sh").output().expect("Failed to execute bttoggle.sh");
-        }
+        }*/
         else if ev.event_code == SPK_TRG && ev.value > 0 {
             //blink2();
             Command::new("sudo").arg("spktoggle.sh").output().expect("Failed to execute spktoggle.sh");
