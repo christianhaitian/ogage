@@ -30,11 +30,11 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
              hotkey);*/
 
     if hotkey{
-        if ev.event_code == BRIGHT_UP {
+        if ev.event_code == BRIGHT_UP && ev.value > 0 {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == BRIGHT_DOWN {
+        else if ev.event_code == BRIGHT_DOWN && ev.value > 0 {
             Command::new("brightnessctl").args(&["-n2","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
@@ -75,11 +75,28 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     }
 }
 
+fn process_event2(_dev: &Device, ev: &InputEvent, selectkey: bool) {
+    /*println!("Event: time {}.{} type {} code {} value {} selectkey {}",
+             ev.time.tv_sec,
+             ev.time.tv_usec,
+             ev.event_type,
+             ev.event_code,
+             ev.value,
+             selectkey);*/
+
+    if selectkey{
+        if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_THUMBR) && ev.value == 1 {
+            Command::new("speak_bat_life.sh").output().expect("Failed to execute battery reading out loud");
+        }
+    }
+}
+
 fn main() -> io::Result<()> {
     let mut poll = Poll::new()?;
     let mut events = Events::with_capacity(1);
     let mut devs: Vec<Device> = Vec::new();
     let mut hotkey = false;
+    let mut selectkey = false;
 
     let mut i = 0;
     for s in ["/dev/input/event10", "/dev/input/event9", "/dev/input/event8", "/dev/input/event7", "/dev/input/event6", "/dev/input/event5", "/dev/input/event4", "/dev/input/event3", "/dev/input/event2", "/dev/input/event1", "/dev/input/event0"].iter() {
@@ -109,7 +126,11 @@ fn main() -> io::Result<()> {
                         if ev.event_code == HOTKEY {
                             hotkey = ev.value == 1 || ev.value == 2;
                         }
-                        process_event(&dev, &ev, hotkey)
+                        process_event(&dev, &ev, hotkey);
+                        if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_SELECT) {
+                            selectkey = ev.value == 1 || ev.value == 2;
+                        }
+                        process_event2(&dev, &ev, selectkey)
                     },
                     _ => (),
                 }
