@@ -138,7 +138,7 @@ fn process_event2(_dev: &Device, ev: &InputEvent, selectkey: bool) {
 
     if selectkey{
         if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_TR2) && ev.value == 1 {
-            Command::new("speak_bat_life.sh").output().expect("Failed to execute battery reading out loud");
+            Command::new("speak_bat_life.sh").spawn().ok().expect("Failed to execute battery reading out loud");
         }
     }
 }
