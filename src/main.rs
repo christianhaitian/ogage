@@ -86,7 +86,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         }*/
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
             //blink2();
-            Command::new("sudo").args(&["systemctl", "poweroff"]).output().expect("Failed to execute power off");
+            Command::new("finish.sh").spawn().ok().expect("Failed to execute shutdown process");
         }
         /*else if ev.event_code == DARK_ON {
             Command::new("sudo").args(&["rfkill", "block", "all"]).output().expect("Failed to execute rfkill");
