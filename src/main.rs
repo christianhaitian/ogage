@@ -52,7 +52,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         else if ev.event_code == QVOL_DN && ev.value > 0 {
             Command::new("volume.sh").args(&["1%-"]).output().expect("Failed to execute volume.sh");
         }
-        else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
+        else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value > 0 {
             //blink2();
             Command::new("finish.sh").spawn().ok().expect("Failed to execute shutdown process");
         }
@@ -62,7 +62,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         Command::new("volume.sh").args(&["-q", "sset", "'Playback Path'", dest]).output().expect("Failed to execute volume.sh");
     }
     else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value == 1 {
-        Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
+        Command::new("pause.sh").spawn().ok().expect("Failed to execute suspend process");
     }
     else if ev.event_code == VOL_UP && ev.value > 0 {
          Command::new("volume.sh").args(&["1+"]).output().expect("Failed to execute volume.sh");
