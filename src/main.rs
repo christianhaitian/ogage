@@ -57,18 +57,18 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //             hotkey);
 
     if hotkey && ev.value == 1 {
-        if ev.event_code == BRIGHT_UP {
+        if ev.event_code == BRIGHT_UP && ev.value > 0 {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == BRIGHT_DOWN {
+        else if ev.event_code == BRIGHT_DOWN && ev.value > 0 {
             Command::new("brightnessctl").args(&["-n","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == VOL_UP {
+        else if ev.event_code == VOL_UP && ev.value > 0 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
         }
-        else if ev.event_code == VOL_DOWN {
+        else if ev.event_code == VOL_DOWN && ev.value > 0 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }
         /*else if ev.event_code == PERF_MAX {
@@ -120,7 +120,7 @@ fn process_event2(_dev: &Device, ev: &InputEvent, selectkey: bool) {
 
     if selectkey{
         if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4) && ev.value == 1 {
-            Command::new("speak_bat_life.sh").output().expect("Failed to execute battery reading out loud");
+            Command::new("speak_bat_life.sh").spawn().ok().expect("Failed to execute battery reading out loud");
         }
     }
 }
