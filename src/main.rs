@@ -79,7 +79,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("sudo").arg("perfnorm").output().expect("Failed to execute performance");
             //blink1();
         }*/
-        else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) {
+        else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value > 0 {
             //blink2();
             Command::new("finish.sh").spawn().ok().expect("Failed to execute shutdown process");
         }
@@ -99,7 +99,7 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     }
     else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value == 1 {
         //blink2();
-        Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute suspend");
+        Command::new("pause.sh").spawn().ok().expect("Failed to execute suspend process");
     }
     else if ev.event_code == VOLUME_UP {
         Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
