@@ -151,7 +151,7 @@ fn main() -> io::Result<()> {
     let mut selectkey = false;
 
     let mut i = 0;
-    for s in ["/dev/input/event2", "/dev/input/event0", "/dev/input/event1"].iter() {
+for s in ["/dev/input/event10", "/dev/input/event9", "/dev/input/event8", "/dev/input/event7", "/dev/input/event6", "/dev/input/event5", "/dev/input/event4", "/dev/input/event3", "/dev/input/event2", "/dev/input/event1", "/dev/input/event0"].iter() {
         if !Path::new(s).exists() {
             println!("Path {} doesn't exist", s);
             continue;
