@@ -48,10 +48,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == QVOL_UP && ev.value > 0 {
-            Command::new("volume.sh").args(&["1%+"]).output().expect("Failed to execute amixer");
+            Command::new("volume.sh").args(&["2%+"]).output().expect("Failed to execute amixer");
         }
         else if ev.event_code == QVOL_DN && ev.value > 0 {
-            Command::new("volume.sh").args(&["1%-"]).output().expect("Failed to execute amixer");
+            Command::new("volume.sh").args(&["2%-"]).output().expect("Failed to execute amixer");
         }
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value > 0 {
             //blink2();
