@@ -33,19 +33,21 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     if hotkey{
         if ev.event_code == BRIGHT_UP && ev.value > 0 {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
-            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == BRIGHT_DOWN && ev.value > 0 {
             Command::new("brightnessctl").args(&["-n2","s","2%-"]).output().expect("Failed to execute brightnessctl");
-            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_UP && ev.value > 0 && Path::new("/home/ark/.config/.SWAPVOLUMEBUTTONS").exists() {
+            Command::new("brightnessctl").args(&["s","1%-"]).output().expect("Failed to execute brightnessctl");
+        }
+        else if ev.event_code == VOL_DN && ev.value > 0 && Path::new("/home/ark/.config/.SWAPVOLUMEBUTTONS").exists() {
+            Command::new("brightnessctl").args(&["-n2","s","+1%"]).output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_UP && ev.value > 0 {
             Command::new("brightnessctl").args(&["s","+1%"]).output().expect("Failed to execute brightnessctl");
-            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_DN && ev.value > 0 {
             Command::new("brightnessctl").args(&["-n2","s","1%-"]).output().expect("Failed to execute brightnessctl");
-            //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == QVOL_UP && ev.value > 0 {
             Command::new("volume.sh").args(&["2%+"]).output().expect("Failed to execute amixer");
@@ -54,15 +56,9 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("volume.sh").args(&["2%-"]).output().expect("Failed to execute amixer");
         }
         else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value > 0 {
-            //blink2();
             Command::new("finish.sh").spawn().ok().expect("Failed to execute shutdown process");
         }
-        /*else if ev.event_code == BT_TRG && ev.value > 0 {
-            //blink2();
-            Command::new("sudo").arg("bttoggle.sh").output().expect("Failed to execute bttoggle.sh");
-        }*/
         else if ev.event_code == SPK_TRG && ev.value > 0 {
-            //blink2();
             Command::new("sudo").arg("spktoggle.sh").output().expect("Failed to execute spktoggle.sh");
         }
     }
