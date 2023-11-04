@@ -16,6 +16,7 @@ static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static MUTE:        EventCode = EventCode::EV_KEY(EV_KEY::KEY_PLAYPAUSE);
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //    println!("Event: time {}.{} type {} code {} value {} hotkey {}",
@@ -60,6 +61,9 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     }
     else if ev.event_code == VOLUME_DOWN && ev.value > 0 {
         Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+    }
+    else if ev.event_code == MUTE && ev.value > 0 {
+        Command::new("mute_toggle.sh").output().expect("Failed to execute amixer");
     }
 }
 
