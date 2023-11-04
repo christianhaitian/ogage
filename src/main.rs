@@ -18,6 +18,7 @@ static QVOL_UP:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static QVOL_DN:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
 static VOL_DN:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static MUTE:        EventCode = EventCode::EV_KEY(EV_KEY::KEY_PLAYPAUSE);
 static BT_TRG:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_MODE);
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
@@ -69,6 +70,9 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     }
     else if ev.event_code == VOL_DN && ev.value > 0 {
          Command::new("volume.sh").args(&["1-"]).output().expect("Failed to execute volume.sh");
+    }
+    else if ev.event_code == MUTE && ev.value > 0 {
+        Command::new("mute_toggle.sh").output().expect("Failed to execute amixer");
     }
     else if ev.event_code == BT_TRG && ev.value > 0 {
          Command::new("sudo").arg("bttoggle.sh").output().expect("Failed to execute bttoggle.sh");
