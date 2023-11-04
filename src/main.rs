@@ -23,8 +23,9 @@ static WIFI_T:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_SELECT);
 //static PERF_NORM:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
 static DISCO_FASTER:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
 static DISCO_SLOWER:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
-//static VOLUME_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
-//static VOLUME_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static VOLUME_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
+static VOLUME_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static MUTE:           EventCode = EventCode::EV_KEY(EV_KEY::KEY_PLAYPAUSE);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -118,6 +119,15 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
     else if ev.event_code == EventCode::EV_KEY(EV_KEY::KEY_POWER) && ev.value == 1 {
         //blink2();
         Command::new("pause.sh").spawn().ok().expect("Failed to execute suspend process");
+    }
+    else if ev.event_code == VOLUME_UP  && ev.value > 0 {
+        Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+    }
+    else if ev.event_code == VOLUME_DOWN  && ev.value > 0 {
+        Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+    }
+    else if ev.event_code == MUTE && ev.value > 0 {
+        Command::new("mute_toggle.sh").output().expect("Failed to execute amixer");
     }
     //else if ev.event_code == VOLUME_UP {
         //Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
