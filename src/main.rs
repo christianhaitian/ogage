@@ -11,18 +11,18 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY5);
-static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
-static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
-static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
-static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
-//static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
-//static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
-//static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-//static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
-static VOLUME_UP:   EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
-static VOLUME_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
-static MUTE:        EventCode = EventCode::EV_KEY(EV_KEY::KEY_PLAYPAUSE);
+static HOTKEY:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY5);
+static BRIGHT_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
+static BRIGHT_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
+static VOL_UP:         EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
+static VOL_DOWN:       EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
+static VOL_UP2:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
+static VOL_DOWN2:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
+static BRIGHT_DOWN2:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
+static BRIGHT_UP2:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4);
+static VOLUME_UP:      EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEUP);
+static VOLUME_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::KEY_VOLUMEDOWN);
+static MUTE:           EventCode = EventCode::EV_KEY(EV_KEY::KEY_PLAYPAUSE);
 
 /*fn blink1() {
     Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
@@ -58,18 +58,18 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
 //             hotkey);
 
     if hotkey && ev.value == 1 {
-        if ev.event_code == BRIGHT_UP {
+        if ev.event_code == BRIGHT_UP || ev.event_code == BRIGHT_UP2 {
             Command::new("brightnessctl").args(&["s","+2%"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == BRIGHT_DOWN {
+        else if ev.event_code == BRIGHT_DOWN || ev.event_code == BRIGHT_DOWN2 {
             Command::new("brightnessctl").args(&["-n","s","2%-"]).output().expect("Failed to execute brightnessctl");
             //Command::new("brightnessctl").arg("-O").output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == VOL_UP {
+        else if ev.event_code == VOL_UP || ev.event_code == VOL_UP2 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
         }
-        else if ev.event_code == VOL_DOWN {
+        else if ev.event_code == VOL_DOWN || ev.event_code == VOL_DOWN2 {
             Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
         }
         /*else if ev.event_code == PERF_MAX {
