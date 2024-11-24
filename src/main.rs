@@ -109,6 +109,12 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         //blink2();
         Command::new("pause.sh").spawn().ok().expect("Failed to execute suspend process");
     }
+    else if ev.event_code == VOL_UP && ev.value > 0 && Path::new("/home/ark/.config/.SWAPVOLUMEBUTTONS").exists() {
+         Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+    }
+    else if ev.event_code == VOL_DN && ev.value > 0 && Path::new("/home/ark/.config/.SWAPVOLUMEBUTTONS").exists() {
+         Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+    }
     else if ev.event_code == VOL_UP && ev.value > 0 {
          Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
     }
