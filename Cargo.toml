@@ -14,3 +14,5 @@ panic = 'abort'
 evdev-rs = "0.4.0"
 mio = { version = "0.7", features = ["os-poll", "os-util"]}
 
+[registries.crates-io]
+protocol = "sparse"
