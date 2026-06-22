@@ -11,7 +11,7 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_THUMBR);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_MODE);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static QVOL_UP:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
@@ -91,7 +91,7 @@ fn process_event2(_dev: &Device, ev: &InputEvent, selectkey: bool) {
              selectkey);*/
 
     if selectkey{
-        if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_THUMBR) && ev.value == 1 {
+        if ev.event_code == EventCode::EV_KEY(EV_KEY::BTN_MODE) && ev.value == 1 {
             Command::new("speak_bat_life.sh").output().expect("Failed to execute battery reading out loud");
         }
     }
